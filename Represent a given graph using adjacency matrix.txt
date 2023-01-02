@@ -1,0 +1,183 @@
+#include<iostream>
+using namespace std;
+#define max 10
+class node
+{
+    public:
+        int cost;
+        node *next;
+        int name;
+
+        node(){
+            cost=0;
+            next=NULL;
+            name=0;
+        }
+};
+class list
+{
+	public:
+        node *llist[max];
+        int vert,edge;
+		list(){
+			vert=edge=0;
+			for(int i=1;i<=max;i++){
+				llist[i]=new node();
+				llist[i]->name = i;
+			}
+		}
+
+		void addnode(int source,int dest,int costNew){
+			node *temp,*curr;
+			temp=llist[source];
+
+			while(temp->next!=NULL)
+				temp=temp->next;
+
+			curr=new node();
+			curr->cost=costNew;
+			curr->name=dest;
+
+			temp->next=curr;
+		}
+
+		void accept(){
+			int source,dest,costNew;
+			node *curr;
+			cout<<"\nEnter total number of vertices : ";
+			cin>>vert;
+
+			cout<<"\nEnter total number of Edges : ";
+			cin>>edge;
+			for(int i=1;i<=edge;i++)
+			{
+				cout<<"\nEnter source vertex, Destination vertex and Cost : ";
+				cin>>source>>dest>>costNew;
+
+				addnode(source,dest,costNew);
+				addnode(dest,source,costNew);
+			}
+		}
+		void display()
+		{
+			node *temp;
+
+			for(int i=1;i<=vert;i++)
+			{
+				temp=llist[i];
+				cout<<llist[i]->name<<" == ";
+				temp=temp->next;
+
+				while(temp!=NULL)
+				{
+					cout<<" "<<temp->name<<" "<<temp->cost<< "==> ";
+					temp=temp->next;
+				}
+				cout<<"\n";
+			}
+		}
+};
+
+class graph
+{
+	int arr[max][max];
+	int edge;
+	int vert;
+	int cost;
+	int source,dest;
+
+	public:
+		graph();
+		void accept();
+		void display();
+};
+
+graph::graph(){
+        edge=0;
+        vert=0;
+        cost=0;
+        source=0;
+        dest=0;
+
+        for(int i=0;i<max;i++)
+        {
+            for(int j=0;j<max;j++)
+            {
+                if(i==j)
+                    arr[i][j]=0;
+                else
+                    arr[i][j]=999;
+            }
+        }
+    }
+void graph::accept()
+{
+	cout<<"\nEnter Number of vertices :  ";
+	cin>>vert;
+	cout<<"\nEnter number of edges : ";
+	cin>>edge;
+
+	for(int i=1;i<=edge;i++)
+	{
+		cout<<"\Enter Source Destination  Cost : ";
+		cin>>source;
+		cin>>dest;
+		cin>>cost;
+
+		arr[source][dest]=arr[dest][source]=cost;
+	}
+}
+
+void graph::display()
+{
+	cout<<"\nAdjecency Matrix : "<<endl;
+	cout<<"\n\n";
+	int s=1;
+	cout<<"\t";
+	for(int k=0;k<vert;k++){
+		cout<<s++<<"\t";
+	}
+	s=1;
+	for(int i=1;i<=vert;i++){
+		cout<<"\n"<<s++;
+		for(int j=1;j<=vert;j++){
+			cout<<"\t"<<arr[i][j];
+		}
+	}
+}
+
+int main()
+{
+   graph gObj;
+   list lObj;
+   int ch=-1;
+   while(ch!=0)
+   {
+	 cout<<"\nGraphs";
+	 cout<<"\n1.Adjacency Graph";
+	 cout<<"\n2.Adjacency List";
+	 cout<<"\n0.Exit";
+	 cout<<"\n\nEnter your choice : ";
+	 cin>>ch;
+
+	 switch(ch){
+		case 1:
+			gObj.accept();
+			gObj.display();
+			break;
+
+		case 2:
+			lObj.accept();
+			lObj.display();
+			break;
+
+		case 0:
+			break;
+
+		default:
+			cout<<"\nInvalid option!!";
+			break;
+	}
+  }
+ return 0;
+}
